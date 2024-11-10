@@ -1,7 +1,7 @@
 import {createContext, useEffect, useState} from "react";
 import {jwtDecode} from "jwt-decode";
 import {io} from "socket.io-client"
-import {login} from "./services/userService.ts";
+import {login} from "./services/userManager.ts";
 
 export const GlobalContext = createContext(undefined);
 

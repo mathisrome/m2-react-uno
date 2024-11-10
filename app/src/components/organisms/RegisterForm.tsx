@@ -3,7 +3,7 @@ import {Field, Form, Formik} from "formik";
 import {EmailIcon, PasswordIcon, UserIcon} from "../atoms/Icon.tsx";
 import FieldLayout from "../molecules/FieldLayout.tsx";
 import CustomLink from "../atoms/CustomLink.tsx";
-import {register} from "../../services/userService.ts";
+import {register} from "../../services/userManager.ts";
 import User from "../../models/user.ts";
 import {useState} from "react";
 import Alert from "../atoms/Alert.tsx";

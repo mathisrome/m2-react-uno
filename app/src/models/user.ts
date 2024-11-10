@@ -1,5 +1,5 @@
 export default class User {
-    id: number | null;
+    id: string | null;
     firstname: string
     lastname: string
     username: string
@@ -12,7 +12,7 @@ export default class User {
         username: string,
         email: string,
         password: string,
-        id: number | null = null
+        id: string | null = null
     ) {
         this.firstname = firstName;
         this.lastname = lastName;

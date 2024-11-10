@@ -3,7 +3,7 @@ import * as Yup from 'yup';
 import FieldLayout from "../molecules/FieldLayout.tsx";
 import {EmailIcon, PasswordIcon} from "../atoms/Icon.tsx";
 import CustomLink from "../atoms/CustomLink.tsx";
-import {login, verified} from "../../services/userService.ts";
+import {login, verified} from "../../services/userManager.ts";
 import {useNavigate, useSearchParams} from "react-router-dom";
 import {useContext, useEffect, useState} from "react";
 import Alert from "../atoms/Alert.tsx";

@@ -48,23 +48,25 @@ export async function verified(userId: number) {
 }
 
 export async function getUser(token: string, userId: string | null) {
-    const response = await fetch(
-        "http://localhost:3000/users/" + userId,
-        {
-            method: "GET",
-            headers: new Headers({
-                "Authorization": "Bearer " + token
-            })
-        }
-    ).then((res) => {
-        return res.json()
-    }).catch(error => {
-        console.error(error)
-    })
+    try {
+        const response = await fetch(
+            "http://localhost:3000/users/" + userId,
+            {
+                method: "GET",
+                headers: new Headers({
+                    "Authorization": "Bearer " + token
+                })
+            }
+        )
 
-    if (response.statusCode === 401) {
+        if (!response.ok) {
+            throw new Error(`Response status: ${response.status}`);
+        }
+
+        return await response.json();
+    } catch (error) {
+        console.error(error.message);
+
         return null
     }
-
-    return response
 }

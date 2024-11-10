@@ -1,17 +1,17 @@
 import {useContext, useEffect, useState} from "react";
 import {GlobalContext} from "../GlobalContext.tsx";
 import {jwtDecode} from "jwt-decode";
-import {createGame} from "../services/gameService.ts";
-import {NavLink} from "react-router-dom";
-import {getUser} from "../services/userService.ts";
+import {createGame} from "../services/gameManager.ts";
+import {NavLink, useNavigate} from "react-router-dom";
+import {getUser} from "../services/userManager.ts";
 import Button from "../components/atoms/Button.tsx";
 import {PlayIcon} from "../components/atoms/Icon.tsx";
 
 export default function CreateGamePage() {
-    const {token} = useContext(GlobalContext)
     const [gameId, setGameId] = useState(null)
-    const {socket} = useContext(GlobalContext)
+    const {socket, token} = useContext(GlobalContext)
     const [player, setPlayer] = useState(null)
+    const navigate = useNavigate()
 
 
     useEffect(() => {
@@ -26,13 +26,13 @@ export default function CreateGamePage() {
         })
     }, [])
 
-    socket.on("joinGame", async (userId) => {
+    socket.on("gameJoined", async (userId) => {
        setPlayer(await getUser(token, userId))
     })
 
     const startGame = () => {
-        console.log(gameId)
         socket.emit("startGame", gameId)
+        navigate("/game/" + gameId)
     }
 
     return <>

@@ -124,19 +124,35 @@ export {transporter}
 
 app.io.on("connection", (socket) => {
     socket.on("createGame", (gameId) => {
+        console.log("La partie suivante a été créé : " + gameId)
+
         socket.join(gameId)
     })
 
-    socket.on("joinGame", (args) => {
-        console.log("Un utilisateur rejoint une partie")
+    socket.on("gameJoined", (args) => {
+        console.log("L'utilisateur " + args.id + " à rejoint la partie : " + args.gameId)
 
-        socket.to(args.gameId).emit("joinGame", args.id)
+        socket.join(args.gameId)
+
+        socket.to(args.gameId).emit("gameJoined", args.id)
     })
 
     socket.on("startGame", (gameId) => {
-        console.log("La partie a été lancée")
-        console.log(socket.rooms)
+        console.log("Partie lancée : " + gameId)
+
         socket.to(gameId).emit("startGame", gameId)
+    })
+
+    socket.on("startGame", (gameId) => {
+        console.log("Partie lancée : " + gameId)
+
+        socket.to(gameId).emit("startGame", gameId)
+    })
+
+    socket.on("updateHand", (gameId, player) => {
+        console.log("Mise à jour de la main du joueur : " + player.user.id + " dans la partie : " + gameId)
+
+        socket.to(gameId).emit("updateHand", player)
     })
 
     socket.on("disconnect", () => {

@@ -12,3 +12,59 @@
         max-width: 15%;
     }
 }
+
+
+.hand {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    grid-template-rows: repeat(1, 200px);
+    grid-gap: 10px;
+    place-items: center;
+    width: 80%;
+    margin: 0 auto;
+
+    li {
+        width: 100%;
+        border-radius: 20px;
+        overflow: hidden;
+        text-align: center;
+        height: 100%;
+
+        article {
+            height: 100%;
+            align-content: center;
+            font-weight: bolder;
+            font-size: 40px;
+        }
+
+        & .red {
+            background: red;
+            color: white;
+        }
+
+        & .blue {
+            background: blue;
+            color: white;
+        }
+
+        & .yellow {
+            background: yellow;
+            color: black;
+        }
+
+        & .green {
+            background: green;
+            color: white;
+        }
+
+        & .special {
+            background: black;
+            color: white;
+        }
+
+        & .hide{
+            background: black;
+            color: black;
+        }
+    }
+}
