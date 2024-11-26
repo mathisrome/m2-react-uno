@@ -1,6 +1,6 @@
 import {SpecialCard} from "../../enums/SpecialCard.ts";
 
-export default function Card({color, number, hide}) {
+export default function Card({color, number, hide, playCard}) {
     let className: string = "uno-card "
 
     if (number < 10 && hide === false) {
@@ -14,7 +14,7 @@ export default function Card({color, number, hide}) {
     }
 
     return <>
-        <article className={className}>
+        <article className={className} onClick={playCard}>
             {number === SpecialCard.COLOR && false === hide ? "Couleur" : ""}
             {number === SpecialCard.TURN && false === hide ? "Sens" : ""}
             {number === SpecialCard.PICK_UP_2 && false === hide ? "+2" : ""}

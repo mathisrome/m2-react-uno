@@ -1,5 +1,12 @@
 import Game from "../models/games.js";
 
+export async function getGame(gameId) {
+	if (!gameId) {
+		return { error: "L'identifiant de la partie est manquant" };
+	}
+	return await Game.findByPk(gameId);
+}
+
 export async function createGame(userId) {
 	if (!userId) {
 		return { error: "L'identifiant du joueur est manquant" };

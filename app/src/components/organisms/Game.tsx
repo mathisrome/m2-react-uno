@@ -1,60 +1,60 @@
-import {DefaultColors, generateCardList, generatePlayer} from "../../services/gameService.ts";
-import User from "../../models/user.ts";
-import {getUser} from "../../services/userManager.ts";
+import {playCard, setupGame} from "../../services/gameService.ts";
 import {useContext, useEffect, useState} from "react";
 import {GlobalContext} from "../../GlobalContext.tsx";
-import {jwtDecode} from "jwt-decode";
 import Hand from "../molecules/Hand.tsx";
 import Player from "../../models/game/player.ts";
 import {useParams} from "react-router-dom";
+import Card from "../../models/game/card.ts";
+import CardComponent from "../atoms/Card.tsx";
 
 export default function Game() {
-    const cardList = generateCardList(DefaultColors)
-    const [player1, setPlayer1] = useState<Player|null>(null)
-    const [player2, setPlayer2] = useState<Player|null>(null)
+    const [pileOfCards, setPileOfCards] = useState<Card[]>([])
+    const [lastCardPlayed, setLastCardPlayed] = useState<Card>(null)
+    const [game, setGame] = useState(null)
+    const [connectedUserId, setConnectedUserId] = useState<number | null>(null)
+    const [players, setPlayers] = useState<Player[]>([])
     const {socket, token} = useContext(GlobalContext)
     const params = useParams()
 
-
     useEffect(() => {
-        const {id} = jwtDecode(token)
-
-        getUser(token, id)
+        setupGame(token, socket, params.gameId)
             .then(data => {
-                const user = new User(
-                    data.firstname,
-                    data.lastname,
-                    data.username,
-                    data.email,
-                    data.password,
-                    data.id,
-                )
-
-                const player = generatePlayer(user, cardList)
-
-                setPlayer1(player)
-
-                socket.emit("updateHand", params.gameId, player)
+                if (data.length === 5) {
+                    setConnectedUserId(data[0])
+                    setGame(data[1])
+                    setPileOfCards(data[2])
+                    setPlayers(data[3])
+                    setLastCardPlayed(data[4])
+                } else {
+                    setConnectedUserId(data[0])
+                    setGame(data[1])
+                }
             })
-
     }, [])
 
-    useEffect(() => {
-        socket.on("updateHand", (player: Player) => {
-            if (player.user !== player1?.user) {
-                setPlayer2(player)
-            }
-        })
-    }, [player2, player1]);
+    socket.on("updatePlayers", (players: Player[]) => {
+        setPlayers(players)
+    })
+
+    socket.on("lastCardPlayed", (card: Card) => {
+        console.log(card)
+        setLastCardPlayed(card)
+    })
+
+    socket.on("pileOfCards", (cards: Card[]) => {
+        setPileOfCards(cards)
+    })
 
     return <>
-        <ul>
-            <li>
-                {player1 !== null ? <Hand cards={player1.hand.cards}/> : ""}
-            </li>
-            <li>
-                {player2 !== null ? <Hand cards={player2.hand.cards} hideCard={true}/> : ""}
-            </li>
-        </ul>
+        {
+            players.length > 0 ?
+                <div>
+                    <Hand playCard={playCard} cards={players[0].hand.cards} hideCard={players[0].user.id !== connectedUserId}/>
+                {lastCardPlayed ? <CardComponent hide={false} color={lastCardPlayed.color.name} number={lastCardPlayed.number}/> : ""}
+                {pileOfCards.length > 0 ? <CardComponent hide={true} color={pileOfCards[0].color.name} number={pileOfCards[0].number}/> : ""}
+                    <Hand playCard={playCard} cards={players[1].hand.cards} hideCard={players[1].user.id !== connectedUserId}/>
+                </div> : ''
+        }
+
     </>
 }

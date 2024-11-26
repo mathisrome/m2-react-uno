@@ -143,16 +143,22 @@ app.io.on("connection", (socket) => {
         socket.to(gameId).emit("startGame", gameId)
     })
 
-    socket.on("startGame", (gameId) => {
-        console.log("Partie lancée : " + gameId)
+    socket.on("updatePlayers", (gameId, players) => {
+        console.log("Mise à jour des joueurs")
 
-        socket.to(gameId).emit("startGame", gameId)
+        socket.to(gameId).emit("updatePlayers", players)
     })
 
-    socket.on("updateHand", (gameId, player) => {
-        console.log("Mise à jour de la main du joueur : " + player.user.id + " dans la partie : " + gameId)
+    socket.on("lastCardPlayed", (gameId, card) => {
+        console.log("Dernière carte jouée")
 
-        socket.to(gameId).emit("updateHand", player)
+        socket.to(gameId).emit("lastCardPlayed", card)
+    })
+
+    socket.on("pileOfCards", (gameId, cards) => {
+        console.log("Envoie de la pile de carte", cards)
+
+        socket.to(gameId).emit("pileOfCards", cards)
     })
 
     socket.on("disconnect", () => {

@@ -34,3 +34,19 @@ export async function joinGame(
         }
     )
 }
+
+export async function getGame(
+    token: string,
+    gameId: string,
+) {
+    return await fetch(
+        "http://localhost:3000/game/" + gameId,
+        {
+            method: "GET",
+            headers: new Headers({
+                "Authorization": "Bearer " + token,
+                "Content-Type": "application/json"
+            })
+        }
+    )
+}
