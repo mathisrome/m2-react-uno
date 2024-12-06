@@ -13,6 +13,7 @@ export default function Game() {
     const [game, setGame] = useState(null)
     const [connectedUserId, setConnectedUserId] = useState<number | null>(null)
     const [players, setPlayers] = useState<Player[]>([])
+
     const {socket, token} = useContext(GlobalContext)
     const params = useParams()
 
@@ -29,6 +30,7 @@ export default function Game() {
                     setConnectedUserId(data[0])
                     setGame(data[1])
                 }
+
             })
     }, [])
 
@@ -45,16 +47,31 @@ export default function Game() {
         setPileOfCards(cards)
     })
 
-    return <>
-        {
-            players.length > 0 ?
+    if (players.length > 0) {
+        if (players[0].user.id === connectedUserId) {
+            return (
                 <div>
-                    <Hand playCard={playCard} cards={players[0].hand.cards} hideCard={players[0].user.id !== connectedUserId}/>
-                {lastCardPlayed ? <CardComponent hide={false} color={lastCardPlayed.color.name} number={lastCardPlayed.number}/> : ""}
-                {pileOfCards.length > 0 ? <CardComponent hide={true} color={pileOfCards[0].color.name} number={pileOfCards[0].number}/> : ""}
-                    <Hand playCard={playCard} cards={players[1].hand.cards} hideCard={players[1].user.id !== connectedUserId}/>
-                </div> : ''
-        }
+                    Joueur ayant créé la partie ({players[0].user.email})
+                    <Hand setPlayers={setPlayers} gameId={game.id} players={players} playCard={playCard} player={players[1]} hideCard={true}/>
 
-    </>
+                    {lastCardPlayed ? <CardComponent hide={false} color={lastCardPlayed.color.name} number={lastCardPlayed.number}/> : ""}
+                    {pileOfCards.length > 0 ? <CardComponent hide={true} color={pileOfCards[0].color.name} number={pileOfCards[0].number}/> : ""}
+
+                    <Hand setPlayers={setPlayers} gameId={game.id} players={players} playCard={playCard} player={players[0]}  hideCard={false}/>
+                </div>
+            )
+        } else {
+            return (
+                <div>
+                    Joueur ayant rejoint la partie ({players[1].user.email})
+                    <Hand setPlayers={setPlayers} gameId={game.id} players={players} player={players[0]}  hideCard={true}/>
+
+                    {lastCardPlayed ? <CardComponent hide={false} color={lastCardPlayed.color.name} number={lastCardPlayed.number}/> : ""}
+                    {pileOfCards.length > 0 ? <CardComponent hide={true} color={pileOfCards[0].color.name} number={pileOfCards[0].number}/> : ""}
+
+                    <Hand setPlayers={setPlayers} gameId={game.id} players={players} player={players[1]}  hideCard={false}/>
+                </div>
+            )
+        }
+    }
 }

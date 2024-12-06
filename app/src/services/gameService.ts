@@ -131,10 +131,6 @@ export async function setupGame(token: string, socket: Socket, gameId: string) {
         const player2 = generatePlayer(otherUser, pileOfCards)
 
         const players = [player1, player2]
-        players.sort((a, b) => {
-            return b.user.id === id ? -1 : a.user.id === id ? 1 : 0;
-        })
-
         socket.emit("updatePlayers", gameId, players)
 
 
@@ -157,10 +153,17 @@ export function pickOneCardRandomly(socket: Socket, pileOfCards: Card[]) {
     const cardPlayed = pileOfCards[cardPlayedIndex]
     removeCardInPile(pileOfCards, cardPlayedIndex)
 
-
     return cardPlayed
 }
 
-export function playCard(ev) {
-    console.log(ev)
+export function playCard(socket: Socket, gameId: number, players: Player[], player: Player, card: Card) {
+    const index = player.hand.cards.findIndex(item => item === card)
+    player.hand.cards.splice(index, 1)
+
+    console.log(players)
+
+    socket.emit("lastCardPlayed", gameId, card)
+    socket.emit("updatePlayers", gameId, players)
+
+    return players
 }

@@ -150,7 +150,7 @@ app.io.on("connection", (socket) => {
     })
 
     socket.on("lastCardPlayed", (gameId, card) => {
-        console.log("Dernière carte jouée")
+        console.log("Dernière carte jouée", card)
 
         socket.to(gameId).emit("lastCardPlayed", card)
     })

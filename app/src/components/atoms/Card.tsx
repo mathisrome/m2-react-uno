@@ -13,14 +13,27 @@ export default function Card({color, number, hide, playCard}) {
         className = className + " hide"
     }
 
-    return <>
-        <article className={className} onClick={playCard}>
-            {number === SpecialCard.COLOR && false === hide ? "Couleur" : ""}
-            {number === SpecialCard.TURN && false === hide ? "Sens" : ""}
-            {number === SpecialCard.PICK_UP_2 && false === hide ? "+2" : ""}
-            {number === SpecialCard.PICK_UP_4 && false === hide ? "+4" : ""}
-            {number === SpecialCard.STOP && false === hide ? "STOP" : ""}
-            {number < 10 && false === hide ? number : ""}
-        </article>
-    </>
+    if (playCard) {
+        return <>
+            <article className={className} onClick={playCard}>
+                {number === SpecialCard.COLOR && false === hide ? "Couleur" : ""}
+                {number === SpecialCard.TURN && false === hide ? "Sens" : ""}
+                {number === SpecialCard.PICK_UP_2 && false === hide ? "+2" : ""}
+                {number === SpecialCard.PICK_UP_4 && false === hide ? "+4" : ""}
+                {number === SpecialCard.STOP && false === hide ? "STOP" : ""}
+                {number < 10 && false === hide ? number : ""}
+            </article>
+        </>
+    } else {
+        return <>
+            <article className={className}>
+                {number === SpecialCard.COLOR && false === hide ? "Couleur" : ""}
+                {number === SpecialCard.TURN && false === hide ? "Sens" : ""}
+                {number === SpecialCard.PICK_UP_2 && false === hide ? "+2" : ""}
+                {number === SpecialCard.PICK_UP_4 && false === hide ? "+4" : ""}
+                {number === SpecialCard.STOP && false === hide ? "STOP" : ""}
+                {number < 10 && false === hide ? number : ""}
+            </article>
+        </>
+    }
 }
