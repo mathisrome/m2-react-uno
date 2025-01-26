@@ -63,13 +63,12 @@
         color: white;
     }
 
-    &.special {
+    &.special:not(.green, .yellow, .blue, .red) {
         background: black;
         color: white;
     }
 
     &.hide{
         background: black;
-        color: black;
     }
 }

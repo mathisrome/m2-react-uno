@@ -1,3 +1,5 @@
+import {GameState} from "../enums/GameState.ts";
+
 export async function createGame(token: string, userId: number) {
     return await fetch(
         "http://localhost:3000/game",
@@ -14,12 +16,20 @@ export async function createGame(token: string, userId: number) {
     )
 }
 
-export async function joinGame(
+export async function updateGame(
     token: string,
     gameId: string,
     action: string,
-    userId: number
+    userId: number,
+    score: number|null = null,
+    winnerId: number|null = null,
 ) {
+    const data = {
+        userId: userId,
+        winner: winnerId,
+        score: score
+    }
+
     return await fetch(
         "http://localhost:3000/game/" + action + "/" + gameId,
         {
@@ -28,9 +38,7 @@ export async function joinGame(
                 "Authorization": "Bearer " + token,
                 "Content-Type": "application/json"
             }),
-            body: JSON.stringify({
-                userId: userId
-            }),
+            body: JSON.stringify(data),
         }
     )
 }

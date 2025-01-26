@@ -8,7 +8,7 @@ export function gamesRoutes(app) {
 			reply.send(await createGame(request.body.userId));
 		}
 	);
-	//rejoindre un jeu
+
 	app.patch(
 		"/game/:action/:gameId",
 		{ preHandler: [app.authenticate] },

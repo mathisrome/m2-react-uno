@@ -11,6 +11,7 @@ import {GlobalProvider} from "./GlobalContext.tsx";
 import CreateGamePage from "./pages/CreateGamePage.tsx";
 import JoinGamePage from "./pages/JoinGamePage.tsx";
 import GamePage from "./pages/GamePage.tsx";
+import EndGamePage from "./pages/EndGamePage.tsx";
 
 const router = createBrowserRouter([
     {
@@ -46,6 +47,10 @@ const router = createBrowserRouter([
             {
                 path: "/game/:gameId",
                 element: <GamePage/>
+            },
+            {
+                path: "/end-game/:gameId",
+                element: <EndGamePage/>
             }
         ]
     },

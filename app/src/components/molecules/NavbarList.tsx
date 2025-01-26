@@ -23,9 +23,6 @@ export default function NavbarList() {
                 <NavLink to={"/create-game"}>Créer une partie</NavLink>
             </li>
             <li>
-                <DialogJoinGame/>
-            </li>
-            <li>
                 <a onClick={logout}>Se déconnecter</a>
             </li>
         </ul>

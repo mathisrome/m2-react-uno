@@ -2,7 +2,7 @@ import {useNavigate, useParams} from "react-router-dom";
 import {useContext, useEffect} from "react";
 import {GlobalContext} from "../GlobalContext.tsx";
 import {jwtDecode} from "jwt-decode";
-import {joinGame} from "../services/gameManager.ts";
+import {updateGame} from "../services/gameManager.ts";
 import {GameState} from "../enums/GameState.ts";
 
 export default function JoinGamePage() {
@@ -14,7 +14,7 @@ export default function JoinGamePage() {
     useEffect(() => {
         const {id} = jwtDecode(token)
 
-        joinGame(
+        updateGame(
             token,
             gameId,
             GameState.JOIN,

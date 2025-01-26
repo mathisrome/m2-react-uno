@@ -33,6 +33,11 @@ export function generatePileOfCards(colors: Color[] = DefaultColors) {
         cards.push(...generateCardsWithSpecifiedColor(color))
     })
 
+    for (let i : number = 0; i < 4; i++) {
+        cards.push(new Card(new Color("black"), SpecialCard.PICK_UP_4, true))
+        cards.push(new Card(new Color("black"), SpecialCard.COLOR, true))
+    }
+
     for (let i = 0; i < 20; i++) {
         cards = fisherYatesShuffle(cards)
     }
@@ -53,8 +58,6 @@ export function generateCardsWithSpecifiedColor(color: Color) {
     cards.push(new Card(color, SpecialCard.TURN, true))
     cards.push(new Card(color, SpecialCard.PICK_UP_2, true))
     cards.push(new Card(color, SpecialCard.PICK_UP_2, true))
-    cards.push(new Card(color, SpecialCard.PICK_UP_4, true))
-    cards.push(new Card(color, SpecialCard.COLOR, true))
 
     return cards
 }
@@ -156,14 +159,70 @@ export function pickOneCardRandomly(socket: Socket, pileOfCards: Card[]) {
     return cardPlayed
 }
 
-export function playCard(socket: Socket, gameId: number, players: Player[], player: Player, card: Card) {
+export function playCard(socket: Socket, gameId: number, players: Player[], player: Player, card: Card, lastCardPlayed: Card, setLastCardPlayed: CallableFunction, setLastPlayerPlayed, pileOfCards) {
     const index = player.hand.cards.findIndex(item => item === card)
-    player.hand.cards.splice(index, 1)
 
-    console.log(players)
+    const otherPlayer = players.find(item => item.user.id !== player.user.id)
 
-    socket.emit("lastCardPlayed", gameId, card)
-    socket.emit("updatePlayers", gameId, players)
+    switch (card.number) {
+        // Pour les cartes "prendre 2 cartes"
+        case SpecialCard.PICK_UP_2:
+            if (card.number === lastCardPlayed.number || card.color.name === lastCardPlayed.color.name || lastCardPlayed.color.name === "black") {
+                for (let i = 0; i < 2; i++) {
+                    const pickedCard = pickOneCardRandomly(socket, pileOfCards)
+                    otherPlayer.hand.cards.push(pickedCard)
+                }
+                player.hand.cards.splice(index, 1)
+                setLastCardPlayed(card)
+                socket.emit("lastCardPlayed", gameId, card)
+                socket.emit("updatePlayers", gameId, players)
+            }
+            break
+
+        // Pour les cartes "prendre 4 cartes"
+        case SpecialCard.PICK_UP_4:
+            for (let i = 0; i < 4; i++) {
+                const pickedCard = pickOneCardRandomly(socket, pileOfCards)
+                otherPlayer.hand.cards.push(pickedCard)
+            }
+            setLastCardPlayed(card)
+            player.hand.cards.splice(index, 1)
+            socket.emit("lastCardPlayed", gameId, card)
+            socket.emit("updatePlayers", gameId, players)
+            break
+
+        // Pour les changements de sens et les stop
+        case SpecialCard.STOP:
+        case SpecialCard.TURN:
+            if (card.number === lastCardPlayed.number || card.color.name === lastCardPlayed.color.name || lastCardPlayed.color.name === "black") {
+                setLastCardPlayed(card)
+                player.hand.cards.splice(index, 1)
+                socket.emit("lastCardPlayed", gameId, card)
+                socket.emit("updatePlayers", gameId, players)
+            }
+            break
+
+        // pour les cartes les changements de couleur
+        case SpecialCard.COLOR:
+            setLastPlayerPlayed(player)
+            setLastCardPlayed(card)
+            player.hand.cards.splice(index, 1)
+            socket.emit("lastPlayerPlayed", gameId, player)
+            socket.emit("lastCardPlayed", gameId, card)
+            socket.emit("updatePlayers", gameId, players)
+            break
+        // Pour les cartes classiques
+        default:
+            if (card.number === lastCardPlayed.number || card.color.name === lastCardPlayed.color.name || lastCardPlayed.color.name === "black") {
+                setLastPlayerPlayed(player)
+                setLastCardPlayed(card)
+                player.hand.cards.splice(index, 1)
+                socket.emit("lastPlayerPlayed", gameId, player)
+                socket.emit("lastCardPlayed", gameId, card)
+                socket.emit("updatePlayers", gameId, players)
+            }
+            break
+    }
 
     return players
 }

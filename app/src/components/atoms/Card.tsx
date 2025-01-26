@@ -6,7 +6,7 @@ export default function Card({color, number, hide, playCard}) {
     if (number < 10 && hide === false) {
         className = className + color
     } else if (number >= 10 && hide === false) {
-        className = className + "special "
+        className = className + "special " + color
     }
 
     if (hide) {

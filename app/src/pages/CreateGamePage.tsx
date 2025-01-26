@@ -40,8 +40,10 @@ export default function CreateGamePage() {
 
         {player ? (player.firstname + " " + player.lastname) : ""}
 
-        <p>Inviter des personnes sur le lien suivant <NavLink
-            to={"/join-game/" + gameId}>{"/join-game/" + gameId}</NavLink></p>
+        <p className={"mb-5"}>Copier le code de la partie en</p>
+        <button className="btn btn-neutral" onClick={() => {
+            navigator.clipboard.writeText(gameId)
+        }}>Cliquant ici</button>
 
         {player ? <Button classNameString={"btn"} icon={<PlayIcon/>} onClickCallback={startGame}>Lancer la partie</Button> : ""}
     </>

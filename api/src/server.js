@@ -155,10 +155,22 @@ app.io.on("connection", (socket) => {
         socket.to(gameId).emit("lastCardPlayed", card)
     })
 
+    socket.on("lastPlayerPlayed", (gameId, player) => {
+        console.log("Dernier joueur qui a joué", player)
+
+        socket.to(gameId).emit("lastPlayerPlayed", player)
+    })
+
     socket.on("pileOfCards", (gameId, cards) => {
         console.log("Envoie de la pile de carte", cards)
 
         socket.to(gameId).emit("pileOfCards", cards)
+    })
+
+    socket.on("gameEnd", (gameId) => {
+        console.log("Fin de la partie : " + gameId)
+
+        socket.to(gameId).emit("gameEnd", gameId)
     })
 
     socket.on("disconnect", () => {

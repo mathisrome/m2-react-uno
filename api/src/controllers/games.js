@@ -53,6 +53,7 @@ export async function updateGame(request) {
 			break;
 		case "finish":
 			game.state = "finished";
+            console.log(request.body.score)
 			if (!request.body.score) {
 				return { error: "Le score est manquant." };
 			}
