@@ -11,8 +11,8 @@ import {GlobalContext} from "../../GlobalContext.tsx";
 
 export default function LoginForm() {
     const LoginSchema = Yup.object().shape({
-        password: Yup.string().min(2).required('Required'),
-        email: Yup.string().email('Invalid email').required('Required'),
+        password: Yup.string().min(2).required('Obligatoire'),
+        email: Yup.string().email('Email invalide').required('Obligatoire'),
     });
 
     const [displayModalError, setDisplayModalError] = useState(false)

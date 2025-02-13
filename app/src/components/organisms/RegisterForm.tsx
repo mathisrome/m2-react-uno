@@ -14,11 +14,11 @@ export default function RegisterForm() {
     const [errorMessage, setErrorMessage] = useState("")
 
     const RegisterSchema = Yup.object().shape({
-        firstname: Yup.string().min(2, "At Least 2 characters").required("Required"),
-        lastname: Yup.string().min(2, "At Least 2 characters").required("Required"),
-        username: Yup.string().min(2, "At Least 2 characters").required("Required"),
-        email: Yup.string().email('Invalid email').required("Required"),
-        password: Yup.string().min(2, "At Least 2 characters").required("Required"),
+        firstname: Yup.string().min(2, "Cette valeur doit faire au moins 2 caractères").required("Obligatoire"),
+        lastname: Yup.string().min(2, "Cette valeur doit faire au moins 2 caractères").required("Obligatoire"),
+        username: Yup.string().min(2, "Cette valeur doit faire au moins 2 caractères").required("Obligatoire"),
+        email: Yup.string().email('Email invalide').required("Obligatoire"),
+        password: Yup.string().min(2, "Cette valeur doit faire au moins 2 caractères").required("Obligatoire"),
     });
 
     const navigate = useNavigate()
