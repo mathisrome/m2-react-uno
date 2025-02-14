@@ -12,6 +12,7 @@ import CreateGamePage from "./pages/CreateGamePage.tsx";
 import JoinGamePage from "./pages/JoinGamePage.tsx";
 import GamePage from "./pages/GamePage.tsx";
 import EndGamePage from "./pages/EndGamePage.tsx";
+import GameHistoryPage from "./pages/GameHistoryPage.tsx";
 
 const router = createBrowserRouter([
     {
@@ -51,6 +52,10 @@ const router = createBrowserRouter([
             {
                 path: "/end-game/:gameId",
                 element: <EndGamePage/>
+            },
+            {
+                path: "/history",
+                element: <GameHistoryPage/>
             }
         ]
     },

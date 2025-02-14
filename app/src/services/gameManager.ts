@@ -58,3 +58,18 @@ export async function getGame(
         }
     )
 }
+
+export async function getGames(
+    token: string
+) {
+    return await fetch(
+        "http://localhost:3000/games",
+        {
+            method: "GET",
+            headers: new Headers({
+                "Authorization": "Bearer " + token,
+                "Content-Type": "application/json"
+            })
+        }
+    )
+}

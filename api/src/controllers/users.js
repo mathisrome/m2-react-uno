@@ -139,7 +139,7 @@ export async function registerUser(userDatas, bcrypt) {
     </mjml>`)
 
     await transporter.sendMail({
-        to: "bar@example.com, baz@example.com", // list of receivers
+        to: user.email, // list of receivers
         subject: "Bienvenue sur le UNO", // Subject line
         html: htmlOutput.html, // html body
     });

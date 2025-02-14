@@ -1,5 +1,9 @@
 import Game from "../models/games.js";
 
+export async function getGames() {
+    return await Game.findAll();
+}
+
 export async function getGame(gameId) {
 	if (!gameId) {
 		return { error: "L'identifiant de la partie est manquant" };
